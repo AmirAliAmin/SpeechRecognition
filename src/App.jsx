@@ -1,33 +1,33 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React from 'react';
+import 'regenerator-runtime/runtime';
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const startListening = ()=> SpeechRecognition.startListening({continuous:true, language: 'en-IN'})
+  const { transcript, browserSupportsSpeechRecognition } = useSpeechRecognition();
+
+  if (!browserSupportsSpeechRecognition) {
+    return null;
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className='container'>
+          <h2>Speech to Text Converter</h2>
+          <br />
+          <p>A React hook that converts speech from the microphone to text and make it avaible to your React</p>
+        <div className='main-content'>
+          {transcript}
+        </div>
+        <div className="btn-style">
+          <button>Copy to clipboard</button>
+          <button onClick={startListening}>Start listening</button>
+          <button onClick={()=>SpeechRecognition.stopListening()}>Stop listening</button>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    
     </>
   )
 }
