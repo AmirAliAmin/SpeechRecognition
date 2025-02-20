@@ -1,12 +1,14 @@
 import React from 'react';
 import 'regenerator-runtime/runtime';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import { useClipboard } from '@mantine/hooks';
 
 import './App.css'
 
 function App() {
-  const startListening = ()=> SpeechRecognition.startListening({continuous:true, language: 'en-IN'})
+  const startListening = ()=> SpeechRecognition.startListening({continuous:true, language: 'en-PK'})
   const { transcript, browserSupportsSpeechRecognition } = useSpeechRecognition();
+  const { copied, copy } = useClipboard();
 
   if (!browserSupportsSpeechRecognition) {
     return null;
@@ -22,7 +24,7 @@ function App() {
           {transcript}
         </div>
         <div className="btn-style">
-          <button>Copy to clipboard</button>
+          <button onClick={() => copy(transcript)}>{copied ? 'Copied!' : 'Copy to clipboard'}</button>
           <button onClick={startListening}>Start listening</button>
           <button onClick={()=>SpeechRecognition.stopListening()}>Stop listening</button>
         </div>
